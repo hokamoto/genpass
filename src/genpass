@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -eu
+
+chars='A-Za-z0-9'
+length=16
+
+if [ $# == 1 ]; then
+    case $1 in
+        # Bank of Tokyo-Mitsubishi UFJ
+        btmu)
+            chars='A-Za-z0-9#$+./:=?@[]^_`|-'
+            length=16;;
+
+        # Sumitomo Mitsui Card
+        smbccard)
+            chars='A-Za-z0-9'
+            length=20;;
+
+        # Unknown
+        *)
+            echo 'Unknown password type'
+            exit 1
+    esac
+fi
+
+# http://www.2uo.de/myths-about-urandom/
+head /dev/urandom | LC_CTYPE=C tr -dc ${chars} | head -c ${length}
+echo
